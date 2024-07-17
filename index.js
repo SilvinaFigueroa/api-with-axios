@@ -70,7 +70,7 @@ async function initialLoad() {
     } else {
         console.error('Check API return, it might be empty:', breeds);
     }
-})();
+})();   
 
 
 const handleEvent = async (event) => {
@@ -90,23 +90,26 @@ const handleEvent = async (event) => {
         })
 
         const breedDetails = await response.json()
-        // console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
+        console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
 
-        //clear carousel for each selection
+        //clear carousel and infoDump for each selection
         Carousel.clear()
-
+        infoDump.innerHTML = ""
+        
         // create a new element of the carousel for each object of breedDetails 
-        breedDetails.map(eachBreed => {
-            const carouselItem = Carousel.createCarouselItem(eachBreed.url, eachBreed.alt_names, eachBreed.id)
+        breedDetails.map(breed => {
+            const carouselItem = Carousel.createCarouselItem(breed.url, breed.alt_names, breed.id)
             Carousel.appendCarousel(carouselItem)
-
-            // Add breed description to the carousel item
-            infoDump.textContent = eachBreed.description;
-            // carouselItem.appendChild(infoDump);
             Carousel.start()// Start needs to be included for every image, otherwise it won't work
-
-
         })
+
+        // Add breed description to the carousel item
+        infoDump.textContent = `Your ${breedDetails[0].breeds[0].name} cat is ${breedDetails[0].breeds[0].temperament}`
+        if (infoDump.innerHTML !== "") {
+            infoDump.style.backgroundColor = "white"; 
+        }
+
+        // carouselItem.appendChild(infoDump);
 
 
 
