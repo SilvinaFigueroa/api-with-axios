@@ -4,8 +4,6 @@ import dotenv from 'dotenv'
 
 
 
-// The information section div element.
-const infoDump = document.getElementById("infoDump");
 // The progress bar div element.
 const progressBar = document.getElementById("progressBar");
 // The get favourites button element.
@@ -34,19 +32,15 @@ async function initialLoad() {
                 'x-api-key': API_KEY
             },
         })
-
         let breeds = await result.json()
         // breedNames = breeds.map((breed)=> breed.name)
         // console.log(`List of Breeds Names: ${JSON.stringify(breedNames)}`);
         // console.log("Initial load called")
         // console.log(`List of Breeds: ${JSON.stringify(breeds)}`);
-
         if (breeds.length > 1) {
             return breeds
         }
         return "Check API return Breeds: ${JSON.stringify(breeds)"
-
-
     } catch (err) {
         console.error(err)
     }
@@ -54,47 +48,73 @@ async function initialLoad() {
 }
 
 
-
 // Wrapping the call of initialLoad() to wait for the promise to be delivered
 (async () => {
     let breeds = await initialLoad()
     // console.log(`List of Breeds: ${JSON.stringify(breeds)}`);
     if (breeds.length > 0) {
-      
+        const breedSelect = document.getElementById("breedSelect");
+
+        // creating one dropdown option per breed
         breeds.forEach(breed => {
             const option = document.createElement('option');
-            option.value = breed.id 
+            option.value = breed.id
             option.textContent = breed.name
             // console.log(`Value ${value} textCont ${textCont}`)
-            document.getElementById("breedSelect").appendChild(option);
+            breedSelect.appendChild(option);
+            // add event listener
+            breedSelect.addEventListener('change', handleEvent)
+
         })
+
     } else {
-        console.error('Check API return, it migth be empty:', breeds)
+        console.error('Check API return, it might be empty:', breeds);
     }
+})();
 
-    // event listener on the option and use the e Object to grab the details for carousel
-    
-            // document.getElementById("breedSelect").addEventListener('change', () =>{
 
-            // let breedSelected = document.getElementById("breedSelect").value
-            // console.log(`breedSelected ${breedSelected}`)
+const handleEvent = async (event) => {
+    const selectedID = event.target.value
+    console.log(`Selected ID ${selectedID}`)
+    // const URL_BREED = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedID}`
+    const URL_BREED = `https://api.thecatapi.com/v1/images/search?limit=20&breed_ids=${selectedID}`
 
-            // return breedSelected
+
+    console.log(URL_BREED)
+    // fetch more data from the breedSelected
+    try {
+        const response = await fetch(URL_BREED, {
+            headers: {
+                'x-api-key': API_KEY
+            }
         })
 
-        let URL_BREED = "https://api.thecatapi.com/v1/images/search?breed_ids=" + breedSelected
-        
-        let selectedObj= await fetch(URL_BREED, {
- 
+        const breedDetails = await response.json()
+        // console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
+
+        //clear carousel for each selection
+        Carousel.clear()
+
+        // create a new element of the carousel for each object of breedDetails 
+        breedDetails.map(eachBreed => {
+            const carouselItem = Carousel.createCarouselItem(eachBreed.url, eachBreed.alt_names, eachBreed.id)
+            Carousel.appendCarousel(carouselItem)
+
+            // Add breed description to the carousel item
+            infoDump.textContent = eachBreed.description;
+            // carouselItem.appendChild(infoDump);
+            Carousel.start()// Start needs to be included for every image, otherwise it won't work
+
+
         })
 
-        let breedDetails = await selectedObj.json()
-        
-        console.log(breedDetails.images)
 
 
-})()
+    } catch (err) {
+        console.error(err)
 
+    }
+}
 
 
 

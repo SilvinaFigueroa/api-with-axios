@@ -53,6 +53,12 @@ body {
   top: 50%;
   transform: translateY(-50%);
 }
+
+.carousel-item img {
+  height: 500px; 
+  object-fit: cover; 
+}
+
 @media (min-width: 768px) {
   .carousel-item {
     margin-right: 0;
