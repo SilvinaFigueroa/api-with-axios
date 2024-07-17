@@ -28,20 +28,30 @@ const API_URL = "https://api.thecatapi.com/v1/breeds"
 
 async function initialLoad() {
     try {
-        const result = await fetch(API_URL, {
-            headers: {
-                'x-api-key': API_KEY
-            },
-        })
-        let breeds = await result.json()
-        let breedNames = breeds.map((breed)=> breed.name)
-        console.log(`List of Breeds Names: ${JSON.stringify(breedNames)}`);
+
+        // -------API call with Fetch
+        // const result = await fetch(API_URL, {
+        //     headers: {
+        //         'x-api-key': API_KEY
+        //     },
+        // })
+        // let breeds = await result.json()
+
+        // -------API call with Axios
+        const result = await axios.get(API_URL)
+        let breeds = result.data
+
         // console.log("Initial load called")
         // console.log(`List of Breeds: ${JSON.stringify(breeds)}`);
 
+
         if (breeds.length > 0) {
+
+        let breedNames = breeds.map((breed) => breed.name)
+        console.log(`List of Breeds Names: ${JSON.stringify(breedNames)}`);
+
             const breedSelect = document.getElementById("breedSelect");
-    
+
             // creating one dropdown option per breed
             breeds.forEach(breed => {
                 const option = document.createElement('option');
@@ -51,7 +61,7 @@ async function initialLoad() {
                 breedSelect.appendChild(option);
                 // add event listener
                 breedSelect.addEventListener('change', handleEvent)
-            })   
+            })
         } else {
             console.error('Check API return, it might be empty:', breeds);
         }
@@ -84,22 +94,31 @@ const handleEvent = async (event) => {
     const URL_BREED = `https://api.thecatapi.com/v1/images/search?limit=20&breed_ids=${selectedID}`
 
 
-    console.log(URL_BREED)
+    // console.log(URL_BREED)
     // fetch more data from the breedSelected
     try {
-        const response = await fetch(URL_BREED, {
-            headers: {
-                'x-api-key': API_KEY
-            }
-        })
 
-        const breedDetails = await response.json()
-        console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
+        // -------API call with Fetch
+
+        // const response = await fetch(URL_BREED, {
+        //     headers: {
+        //         'x-api-key': API_KEY
+        //     }
+        // })
+
+        // const breedDetails = await response.json()
+        // console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
+
+        // -------API call with Axios
+
+        const response = await axios.get(URL_BREED+'&api_key='+API_KEY)
+        const breedDetails = response.data
+
+        // console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
 
         //clear carousel and infoDump for each selection
-        Carousel.clear()
         infoDump.innerHTML = ""
-        
+
         // create a new element of the carousel for each object of breedDetails 
         breedDetails.map(breed => {
             const carouselItem = Carousel.createCarouselItem(breed.url, breed.alt_names, breed.id)
@@ -110,15 +129,13 @@ const handleEvent = async (event) => {
         // Add breed description to the carousel item
         infoDump.textContent = `Your ${breedDetails[0].breeds[0].name} cat is ${breedDetails[0].breeds[0].temperament}`
         if (infoDump.innerHTML !== "") {
-            infoDump.style.backgroundColor = "white"; 
+            infoDump.style.backgroundColor = "white";
         }
 
     } catch (err) {
         console.error(err)
     }
 }
-
-
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
@@ -132,12 +149,17 @@ const handleEvent = async (event) => {
  *   by setting a default header with your API key so that you do not have to
  *   send it manually with all of your requests! You can also set a default base URL!
  */
-/**
- * 5. Add axios interceptors to log the time between request and response to the console.
- * - Hint: you already have access to code that does this!
- * - Add a console.log statement to indicate when requests begin.
- * - As an added challenge, try to do this on your own without referencing the lesson material.
- */
+
+
+
+
+
+
+//  * 5. Add axios interceptors to log the time between request and response to the console.
+//  * - Hint: you already have access to code that does this!
+//  * - Add a console.log statement to indicate when requests begin.
+//  * - As an added challenge, try to do this on your own without referencing the lesson material.
+//  */
 
 /**
  * 6. Next, we'll create a progress bar to indicate the request is in progress.

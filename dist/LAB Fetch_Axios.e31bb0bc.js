@@ -54214,25 +54214,16 @@ function _initialLoad() {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return fetch(API_URL, {
-            headers: {
-              'x-api-key': API_KEY
-            }
-          });
+          return _axios.default.get(API_URL);
         case 3:
           result = _context2.sent;
-          _context2.next = 6;
-          return result.json();
-        case 6:
-          breeds = _context2.sent;
-          breedNames = breeds.map(function (breed) {
-            return breed.name;
-          });
-          console.log("List of Breeds Names: ".concat(JSON.stringify(breedNames)));
-          // console.log("Initial load called")
+          breeds = result.data; // console.log("Initial load called")
           // console.log(`List of Breeds: ${JSON.stringify(breeds)}`);
-
           if (breeds.length > 0) {
+            breedNames = breeds.map(function (breed) {
+              return breed.name;
+            });
+            console.log("List of Breeds Names: ".concat(JSON.stringify(breedNames)));
             breedSelect = document.getElementById("breedSelect"); // creating one dropdown option per breed
             breeds.forEach(function (breed) {
               var option = document.createElement('option');
@@ -54247,15 +54238,15 @@ function _initialLoad() {
             console.error('Check API return, it might be empty:', breeds);
           }
           return _context2.abrupt("return", "Check API return Breeds: ${JSON.stringify(breeds)");
-        case 13:
-          _context2.prev = 13;
+        case 9:
+          _context2.prev = 9;
           _context2.t0 = _context2["catch"](0);
           console.error(_context2.t0);
-        case 16:
+        case 12:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[0, 13]]);
+    }, _callee2, null, [[0, 9]]);
   }));
   return _initialLoad.apply(this, arguments);
 }
@@ -54284,26 +54275,15 @@ var handleEvent = /*#__PURE__*/function () {
           selectedID = event.target.value;
           console.log("Selected ID ".concat(selectedID));
           // const URL_BREED = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedID}`
-          URL_BREED = "https://api.thecatapi.com/v1/images/search?limit=20&breed_ids=".concat(selectedID);
-          console.log(URL_BREED);
+          URL_BREED = "https://api.thecatapi.com/v1/images/search?limit=20&breed_ids=".concat(selectedID); // console.log(URL_BREED)
           // fetch more data from the breedSelected
-          _context.prev = 4;
-          _context.next = 7;
-          return fetch(URL_BREED, {
-            headers: {
-              'x-api-key': API_KEY
-            }
-          });
-        case 7:
+          _context.prev = 3;
+          _context.next = 6;
+          return _axios.default.get(URL_BREED + '&api_key=' + API_KEY);
+        case 6:
           response = _context.sent;
-          _context.next = 10;
-          return response.json();
-        case 10:
-          breedDetails = _context.sent;
-          console.log("Breed Details ".concat(JSON.stringify(breedDetails)));
-
+          breedDetails = response.data; // console.log(`Breed Details ${JSON.stringify(breedDetails)}`)
           //clear carousel and infoDump for each selection
-          Carousel.clear();
           infoDump.innerHTML = "";
 
           // create a new element of the carousel for each object of breedDetails 
@@ -54318,17 +54298,17 @@ var handleEvent = /*#__PURE__*/function () {
           if (infoDump.innerHTML !== "") {
             infoDump.style.backgroundColor = "white";
           }
-          _context.next = 22;
+          _context.next = 17;
           break;
-        case 19:
-          _context.prev = 19;
-          _context.t0 = _context["catch"](4);
+        case 14:
+          _context.prev = 14;
+          _context.t0 = _context["catch"](3);
           console.error(_context.t0);
-        case 22:
+        case 17:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[4, 19]]);
+    }, _callee, null, [[3, 14]]);
   }));
   return function handleEvent(_x) {
     return _ref.apply(this, arguments);
@@ -54347,12 +54327,12 @@ var handleEvent = /*#__PURE__*/function () {
  *   by setting a default header with your API key so that you do not have to
  *   send it manually with all of your requests! You can also set a default base URL!
  */
-/**
- * 5. Add axios interceptors to log the time between request and response to the console.
- * - Hint: you already have access to code that does this!
- * - Add a console.log statement to indicate when requests begin.
- * - As an added challenge, try to do this on your own without referencing the lesson material.
- */
+
+//  * 5. Add axios interceptors to log the time between request and response to the console.
+//  * - Hint: you already have access to code that does this!
+//  * - Add a console.log statement to indicate when requests begin.
+//  * - As an added challenge, try to do this on your own without referencing the lesson material.
+//  */
 
 /**
  * 6. Next, we'll create a progress bar to indicate the request is in progress.
