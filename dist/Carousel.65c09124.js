@@ -54136,80 +54136,81 @@ var API_URL = "https://api.thecatapi.com/v1/breeds";
  */
 function initialLoad() {
   return _initialLoad.apply(this, arguments);
-} // Wrapping the call of initialLoad() to wait for the promise to be delivered
+}
 function _initialLoad() {
-  _initialLoad = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-    var result, breeds;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) switch (_context3.prev = _context3.next) {
+  _initialLoad = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var result, breeds, breedNames, breedSelect;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          _context3.prev = 0;
-          _context3.next = 3;
+          _context2.prev = 0;
+          _context2.next = 3;
           return fetch(API_URL, {
             headers: {
               'x-api-key': API_KEY
             }
           });
         case 3:
-          result = _context3.sent;
-          _context3.next = 6;
+          result = _context2.sent;
+          _context2.next = 6;
           return result.json();
         case 6:
-          breeds = _context3.sent;
-          if (!(breeds.length > 1)) {
-            _context3.next = 9;
-            break;
+          breeds = _context2.sent;
+          breedNames = breeds.map(function (breed) {
+            return breed.name;
+          });
+          console.log("List of Breeds Names: ".concat(JSON.stringify(breedNames)));
+          // console.log("Initial load called")
+          // console.log(`List of Breeds: ${JSON.stringify(breeds)}`);
+
+          if (breeds.length > 0) {
+            breedSelect = document.getElementById("breedSelect"); // creating one dropdown option per breed
+            breeds.forEach(function (breed) {
+              var option = document.createElement('option');
+              option.value = breed.id;
+              option.textContent = breed.name;
+              // console.log(`Value ${value} textCont ${textCont}`)
+              breedSelect.appendChild(option);
+              // add event listener
+              breedSelect.addEventListener('change', handleEvent);
+            });
+          } else {
+            console.error('Check API return, it might be empty:', breeds);
           }
-          return _context3.abrupt("return", breeds);
-        case 9:
-          return _context3.abrupt("return", "Check API return Breeds: ${JSON.stringify(breeds)");
-        case 12:
-          _context3.prev = 12;
-          _context3.t0 = _context3["catch"](0);
-          console.error(_context3.t0);
-        case 15:
+          return _context2.abrupt("return", "Check API return Breeds: ${JSON.stringify(breeds)");
+        case 13:
+          _context2.prev = 13;
+          _context2.t0 = _context2["catch"](0);
+          console.error(_context2.t0);
+        case 16:
         case "end":
-          return _context3.stop();
+          return _context2.stop();
       }
-    }, _callee3, null, [[0, 12]]);
+    }, _callee2, null, [[0, 13]]);
   }));
   return _initialLoad.apply(this, arguments);
 }
-_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var breeds, breedSelect;
-  return _regeneratorRuntime().wrap(function _callee$(_context) {
-    while (1) switch (_context.prev = _context.next) {
-      case 0:
-        _context.next = 2;
-        return initialLoad();
-      case 2:
-        breeds = _context.sent;
-        // console.log(`List of Breeds: ${JSON.stringify(breeds)}`);
-        if (breeds.length > 0) {
-          breedSelect = document.getElementById("breedSelect"); // creating one dropdown option per breed
-          breeds.forEach(function (breed) {
-            var option = document.createElement('option');
-            option.value = breed.id;
-            option.textContent = breed.name;
-            // console.log(`Value ${value} textCont ${textCont}`)
-            breedSelect.appendChild(option);
-            // add event listener
-            breedSelect.addEventListener('change', handleEvent);
-          });
-        } else {
-          console.error('Check API return, it might be empty:', breeds);
-        }
-      case 4:
-      case "end":
-        return _context.stop();
-    }
-  }, _callee);
-}))();
+initialLoad();
+
+/**
+ * 2. Create an event handler for breedSelect that does the following:
+ * - Retrieve information on the selected breed from the cat API using fetch().
+ *  - Make sure your request is receiving multiple array items!
+ *  - Check the API documentation if you're only getting a single object.
+ * - For each object in the response array, create a new element for the carousel.
+ *  - Append each of these new elements to the carousel.
+ * - Use the other data you have been given to create an informational section within the infoDump element.
+ *  - Be creative with how you create DOM elements and HTML.
+ *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
+ *  - Remember that functionality comes first, but user experience and design are important.
+ * - Each new selection should clear, re-populate, and restart the Carousel.
+ */
+
 var handleEvent = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
     var selectedID, URL_BREED, response, breedDetails;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
         case 0:
           selectedID = event.target.value;
           console.log("Selected ID ".concat(selectedID));
@@ -54217,19 +54218,19 @@ var handleEvent = /*#__PURE__*/function () {
           URL_BREED = "https://api.thecatapi.com/v1/images/search?limit=20&breed_ids=".concat(selectedID);
           console.log(URL_BREED);
           // fetch more data from the breedSelected
-          _context2.prev = 4;
-          _context2.next = 7;
+          _context.prev = 4;
+          _context.next = 7;
           return fetch(URL_BREED, {
             headers: {
               'x-api-key': API_KEY
             }
           });
         case 7:
-          response = _context2.sent;
-          _context2.next = 10;
+          response = _context.sent;
+          _context.next = 10;
           return response.json();
         case 10:
-          breedDetails = _context2.sent;
+          breedDetails = _context.sent;
           console.log("Breed Details ".concat(JSON.stringify(breedDetails)));
 
           //clear carousel and infoDump for each selection
@@ -54248,39 +54249,22 @@ var handleEvent = /*#__PURE__*/function () {
           if (infoDump.innerHTML !== "") {
             infoDump.style.backgroundColor = "white";
           }
-
-          // carouselItem.appendChild(infoDump);
-          _context2.next = 22;
+          _context.next = 22;
           break;
         case 19:
-          _context2.prev = 19;
-          _context2.t0 = _context2["catch"](4);
-          console.error(_context2.t0);
+          _context.prev = 19;
+          _context.t0 = _context["catch"](4);
+          console.error(_context.t0);
         case 22:
         case "end":
-          return _context2.stop();
+          return _context.stop();
       }
-    }, _callee2, null, [[4, 19]]);
+    }, _callee, null, [[4, 19]]);
   }));
   return function handleEvent(_x) {
-    return _ref2.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 }();
-
-/**
- * 2. Create an event handler for breedSelect that does the following:
- * - Retrieve information on the selected breed from the cat API using fetch().
- *  - Make sure your request is receiving multiple array items!
- *  - Check the API documentation if you're only getting a single object.
- * - For each object in the response array, create a new element for the carousel.
- *  - Append each of these new elements to the carousel.
- * - Use the other data you have been given to create an informational section within the infoDump element.
- *  - Be creative with how you create DOM elements and HTML.
- *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
- *  - Remember that functionality comes first, but user experience and design are important.
- * - Each new selection should clear, re-populate, and restart the Carousel.
- * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
- */
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
@@ -54353,14 +54337,14 @@ function favourite(_x2) {
  *   your code should account for this.
  */
 function _favourite() {
-  _favourite = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(imgId) {
-    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) switch (_context4.prev = _context4.next) {
+  _favourite = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(imgId) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
         case "end":
-          return _context4.stop();
+          return _context3.stop();
       }
-    }, _callee4);
+    }, _callee3);
   }));
   return _favourite.apply(this, arguments);
 }
